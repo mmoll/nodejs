@@ -1,3 +1,11 @@
+nodejs (4.2.6~dfsg-2foreman1) xenial; urgency=medium
+
+  * Cherry-picked
+    https://github.com/nodejs/node/commit/49921e8819d5c0db144f2c71fd2155390fe37370
+    to unbreak Foreman build on ARMv8, Foreman issue #17491.
+
+ -- Michael Moll <mmoll@mmoll.at>  Mon, 28 Nov 2016 01:34:03 +0100
+
 nodejs (4.2.6~dfsg-1ubuntu4.1) xenial; urgency=medium
 
   * Recompile to resolve miscompilation on s390x architecture. LP:

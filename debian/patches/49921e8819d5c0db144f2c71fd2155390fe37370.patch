@@ -1,0 +1,64 @@
+Description: backport a fix to a crankshaft bug affects arm64 systems
+ .
+ nodejs (4.2.6~dfsg-2foreman1) xenial; urgency=medium
+ .
+   * Cherry-picked
+     https://github.com/nodejs/node/commit/49921e8819d5c0db144f2c71fd2155390fe37370
+     to unbreak Foreman build on ARMv8, Foreman issue #17491.
+Author: Michael Moll <mmoll@mmoll.at>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: https://github.com/nodejs/node/commit/49921e8819d5c0db144f2c71fd2155390fe37370
+
+--- nodejs-4.2.6~dfsg.orig/deps/v8/src/arm64/lithium-codegen-arm64.cc
++++ nodejs-4.2.6~dfsg/deps/v8/src/arm64/lithium-codegen-arm64.cc
+@@ -2801,6 +2801,8 @@ void LCodeGen::DoDoubleToIntOrSmi(LDoubl
+ 
+ void LCodeGen::DoDrop(LDrop* instr) {
+   __ Drop(instr->count());
++
++  RecordPushedArgumentsDelta(instr->hydrogen_value()->argument_delta());
+ }
+ 
+ 
+--- /dev/null
++++ nodejs-4.2.6~dfsg/deps/v8/test/mjsunit/regress/regress-arm64-spillslots.js
+@@ -0,0 +1,34 @@
++// Copyright 2015 the V8 project authors. All rights reserved.
++// Use of this source code is governed by a BSD-style license that can be
++// found in the LICENSE file.
++
++// Flags: --allow-natives-syntax
++
++"use strict";
++
++function Message(message) {
++  this.message = message;
++}
++
++function Inlined(input) {
++  var dummy = arguments[1] === undefined;
++  if (input instanceof Message) {
++    return input;
++  }
++  print("unreachable, but we must create register allocation complexity");
++  return [];
++}
++
++function Process(input) {
++  var ret = [];
++  ret.push(Inlined(input[0], 1, 2));
++  return ret;
++}
++
++var input = [new Message("TEST PASS")];
++
++Process(input);
++Process(input);
++%OptimizeFunctionOnNextCall(Process);
++var result = Process(input);
++assertEquals("TEST PASS", result[0].message);

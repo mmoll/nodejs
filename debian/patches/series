@@ -11,3 +11,4 @@ shared_can_build_without_gyp.patch
 test_ci_buildd.patch
 fix_sslv3_test.patch
 1cc5c2dad018880c95c41f23570df350e99e4621.patch
+49921e8819d5c0db144f2c71fd2155390fe37370.patch
