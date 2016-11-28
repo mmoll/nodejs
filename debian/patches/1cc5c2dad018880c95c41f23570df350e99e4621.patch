@@ -1,0 +1,31 @@
+From 1cc5c2dad018880c95c41f23570df350e99e4621 Mon Sep 17 00:00:00 2001
+From: Richard Lau <riclau@uk.ibm.com>
+Date: Wed, 3 Feb 2016 14:22:42 -0500
+Subject: [PATCH] deps/v8z: Update to tag export-4.5-to-node-2016-02-03
+
+---
+ deps/v8z/src/s390/code-stubs-s390.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/deps/v8z/src/s390/code-stubs-s390.cc b/deps/v8z/src/s390/code-stubs-s390.cc
+index 2205bcb..4fe03ae 100644
+--- a/deps/v8/src/s390/code-stubs-s390.cc
++++ b/deps/v8/src/s390/code-stubs-s390.cc
+@@ -1202,7 +1202,7 @@ void JSEntryStub::Generate(MacroAssembler* masm) {
+   ProfileEntryHookStub::MaybeCallEntryHook(masm);
+ 
+   // saving floating point registers
+-#if V8_HOST_ARCH_S390X
++#if V8_TARGET_ARCH_S390X
+   // 64bit ABI requires f8 to f15 be saved
+   __ lay(sp, MemOperand(sp, -8 * kDoubleSize));
+   __ std(d8, MemOperand(sp));
+@@ -1376,7 +1376,7 @@ void JSEntryStub::Generate(MacroAssembler* masm) {
+   __ la(sp, MemOperand(sp, 10 * kPointerSize));
+ 
+   // saving floating point registers
+-#if V8_HOST_ARCH_S390X
++#if V8_TARGET_ARCH_S390X
+   // 64bit ABI requires f8 to f15 be saved
+   __ ld(d8, MemOperand(sp));
+   __ ld(d9, MemOperand(sp, 1 * kDoubleSize));

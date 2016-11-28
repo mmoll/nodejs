@@ -1,0 +1,16 @@
+Description: properly handle how SSLv3 was disabled in openssl
+Author: Marc Deslauriers <marc.deslauriers@canonical.com>
+
+Index: nodejs-4.2.6~dfsg/test/parallel/test-tls-no-sslv3.js
+===================================================================
+--- nodejs-4.2.6~dfsg.orig/test/parallel/test-tls-no-sslv3.js	2016-01-21 13:35:03.000000000 -0500
++++ nodejs-4.2.6~dfsg/test/parallel/test-tls-no-sslv3.js	2016-01-22 11:08:27.994379951 -0500
+@@ -53,6 +53,8 @@
+ process.on('exit', function() {
+   if (/unknown option -ssl3/.test(stderr)) {
+     console.log('1..0 # Skipped: `openssl s_client -ssl3` not supported.');
++  } else if (/null ssl method passed/.test(stderr)) {
++    console.log('1..0 # Skipped: `openssl s_client -ssl3` is disabled.');
+   } else {
+     assert.equal(errors.length, 1);
+     assert(/:wrong version number/.test(errors[0].message));
